@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PricePilot - Find the Best Price</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #17233c;
+}
+
+header {
+  background: white;
+  padding: 22px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+  color: #2463eb;
+}
+
+nav a {
+  margin-left: 25px;
+  text-decoration: none;
+  color: #26334c;
+}
+
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #68758c;
+}
+
+.search {
+  margin: 35px auto;
+  max-width: 650px;
+  display: flex;
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px #00000010;
+}
+
+.search input {
+  flex: 1;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  outline: none;
+  min-width: 0;
+}
+
+.search button {
+  background: #2463eb;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.categories {
+  text-align: center;
+  padding: 45px 20px;
+}
+
+.categories h2 {
+  font-size: 28px;
+}
+
+.category {
+  display: inline-block;
+  background: white;
+  padding: 22px 30px;
+  margin: 10px;
+  border-radius: 12px;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #68758c;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PricePilot</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#categories">Categories</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Find the Best Price. Every Time.</h1>
+  <p>Search products, compare prices, and find the best deals.</p>
+
+  <div class="search">
+    <input id="searchInput"
+    placeholder="Search for any product...">
+    <button onclick="searchProduct()">Search</button>
+  </div>
+  <p id="message"></p>
+</section>
+
+<section class="categories" id="categories">
+  <h2>Shop Smarter</h2>
+  <div class="category">Electronics</div>
+  <div class="category">Clothing</div>
+  <div class="category">Sports</div>
+  <div class="category">Home</div>
+  <div class="category">Everything Else</div>
+</section>
+
+<footer>
+  © 2026 PricePilot. Shop smarter. Save more.
+</footer>
+
+<script>
+function searchProduct() {
+  const product = document.getElementById("searchInput").value;
+
+  if (!product.trim()) {
+    document.getElementById("message").textContent =
+      "Please enter a product to search.";
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Searching for " + product + "...";
+}
+</script>
+
+</body>
+</html>
