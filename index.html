@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PricePilot - Find the Best Price</title>
+<title>PricePilot | Compare Prices</title>
+
 <style>
 * { box-sizing: border-box; }
 
@@ -29,75 +30,108 @@ header {
 }
 
 nav a {
-  margin-left: 25px;
+  margin-left: 20px;
   text-decoration: none;
   color: #26334c;
 }
 
 .hero {
   text-align: center;
-  padding: 100px 20px;
+  padding: 75px 20px 40px;
 }
 
-.hero h1 {
-  font-size: 48px;
-  margin-bottom: 15px;
-}
+.hero h1 { font-size: 42px; }
 
-.hero p {
-  font-size: 18px;
-  color: #68758c;
-}
+.hero p { color: #68758c; }
 
 .search {
-  margin: 35px auto;
-  max-width: 650px;
   display: flex;
-  background: white;
+  max-width: 650px;
+  margin: 30px auto;
   padding: 8px;
+  background: white;
   border-radius: 12px;
   box-shadow: 0 5px 25px #00000010;
 }
 
 .search input {
   flex: 1;
+  min-width: 0;
   border: none;
+  outline: none;
   padding: 15px;
   font-size: 16px;
-  outline: none;
-  min-width: 0;
 }
 
-.search button {
+button {
   background: #2463eb;
   color: white;
   border: none;
-  padding: 15px 25px;
+  padding: 14px 23px;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.categories {
-  text-align: center;
-  padding: 45px 20px;
+button:hover { background: #174bbd; }
+
+#results {
+  max-width: 1050px;
+  margin: 20px auto 60px;
+  padding: 20px;
 }
 
-.categories h2 {
-  font-size: 28px;
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.product {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 15px #00000008;
+}
+
+.product .image {
+  font-size: 65px;
+  padding: 20px;
+}
+
+.product h3 { font-size: 18px; }
+
+.price {
+  font-size: 23px;
+  font-weight: bold;
+  color: #2463eb;
+}
+
+.demo {
+  color: #8993a4;
+  font-size: 12px;
 }
 
 .category {
   display: inline-block;
+  padding: 12px 20px;
+  margin: 5px;
   background: white;
-  padding: 22px 30px;
-  margin: 10px;
-  border-radius: 12px;
+  border-radius: 10px;
+  cursor: pointer;
 }
+
+.category:hover { background: #e4edff; }
 
 footer {
   text-align: center;
-  padding: 35px;
+  padding: 30px;
   color: #68758c;
+}
+
+@media(max-width: 600px) {
+  .hero h1 { font-size: 32px; }
+  header { padding: 18px 5%; }
 }
 </style>
 </head>
@@ -114,42 +148,86 @@ footer {
 
 <section class="hero">
   <h1>Find the Best Price. Every Time.</h1>
-  <p>Search products, compare prices, and find the best deals.</p>
+  <p>Search products, compare prices, and shop smarter.</p>
 
   <div class="search">
     <input id="searchInput"
-    placeholder="Search for any product...">
+    placeholder="Search for Nike shoes, headphones, TVs..."
+    onkeydown="if(event.key==='Enter') searchProduct()">
     <button onclick="searchProduct()">Search</button>
   </div>
-  <p id="message"></p>
 </section>
 
-<section class="categories" id="categories">
-  <h2>Shop Smarter</h2>
-  <div class="category">Electronics</div>
-  <div class="category">Clothing</div>
-  <div class="category">Sports</div>
-  <div class="category">Home</div>
-  <div class="category">Everything Else</div>
+<section id="categories" style="text-align:center">
+  <h2>Shop by Category</h2>
+  <span class="category" onclick="searchCategory('electronics')">Electronics</span>
+  <span class="category" onclick="searchCategory('clothing')">Clothing</span>
+  <span class="category" onclick="searchCategory('sports')">Sports</span>
+  <span class="category" onclick="searchCategory('home')">Home</span>
+</section>
+
+<section id="results">
+  <h2>Popular Products</h2>
+  <div class="products" id="productList"></div>
 </section>
 
 <footer>
-  © 2026 PricePilot. Shop smarter. Save more.
+  © 2026 PricePilot | Shop Smarter. Save More.
 </footer>
 
 <script>
-function searchProduct() {
-  const product = document.getElementById("searchInput").value;
 
-  if (!product.trim()) {
-    document.getElementById("message").textContent =
-      "Please enter a product to search.";
+const products = [
+  {name:"Nike Air Force 1",price:115,category:"clothing",image:"👟",store:"Demo Store"},
+  {name:"Apple AirPods Pro",price:189,category:"electronics",image:"🎧",store:"Demo Store"},
+  {name:"Samsung 4K TV",price:399,category:"electronics",image:"📺",store:"Demo Store"},
+  {name:"Wilson Golf Clubs",price:249,category:"sports",image:"⛳",store:"Demo Store"},
+  {name:"Adidas Hoodie",price:55,category:"clothing",image:"👕",store:"Demo Store"},
+  {name:"Gaming Headset",price:79,category:"electronics",image:"🎮",store:"Demo Store"},
+  {name:"Basketball",price:30,category:"sports",image:"🏀",store:"Demo Store"},
+  {name:"Desk Lamp",price:25,category:"home",image:"💡",store:"Demo Store"}
+];
+
+function displayProducts(items) {
+  const list = document.getElementById("productList");
+
+  if(items.length === 0) {
+    list.innerHTML = "<p>No products found. Try another search.</p>";
     return;
   }
 
-  document.getElementById("message").textContent =
-    "Searching for " + product + "...";
+  list.innerHTML = items.map(product => `
+    <div class="product">
+      <div class="image">${product.image}</div>
+      <h3>${product.name}</h3>
+      <div class="price">$${product.price.toFixed(2)}</div>
+      <p>${product.store}</p>
+      <p class="demo">Sample price — not a live offer</p>
+    </div>
+  `).join("");
 }
+
+function searchProduct() {
+  const search = document.getElementById("searchInput")
+    .value.trim().toLowerCase();
+
+  const matches = products.filter(product =>
+    product.name.toLowerCase().includes(search) ||
+    product.category.toLowerCase().includes(search)
+  );
+
+  document.getElementById("results").scrollIntoView();
+  displayProducts(matches);
+}
+
+function searchCategory(category) {
+  document.getElementById("searchInput").value = category;
+  displayProducts(products.filter(p => p.category === category));
+  document.getElementById("results").scrollIntoView();
+}
+
+displayProducts(products);
+
 </script>
 
 </body>
